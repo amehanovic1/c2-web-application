@@ -7,14 +7,14 @@ nav {
     width: 100%;
     font-size: 18px;
     background-color: rgb(229, 234, 234);
-    position: sticky;
+    overflow: hidden;
     top: 0;
+    position: sticky;
 }
 
 nav .meni_1 {
     list-style-type: none;
     padding: 10px;
-    overflow: auto;
 }
 
 nav .meni_1 li {
@@ -72,5 +72,5 @@ h1 {
 }
 
 .tabela > div img {
-    width: 30%;
+    width: 25%
 }
