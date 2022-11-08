@@ -66,5 +66,11 @@ h1 {
     background-color: gray;
 }
 
+.tabela > div {
+    text-align: center;
+    padding: 10px;
+}
 
-
+.tabela > div img {
+    width: 30%;
+}
