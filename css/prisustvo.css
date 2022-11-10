@@ -1,0 +1,52 @@
+table {
+    border-collapse: collapse;
+    width: 1000px;
+    text-align: left;
+}
+
+table th, td{
+    border: 1px solid black;
+}
+
+table td {
+    vertical-align: text-top;
+    font-size: 15px;
+    padding: 10px;
+}
+
+table th {
+    text-align: left;
+    font-size: 20px;
+    vertical-align: text-top;
+    padding: 10px;
+}
+
+table .ime_prezime {
+    width: 10%;
+}
+
+table .trenutna_sedmica {
+    width: 15%;
+}
+
+table .sedmica_nije_odrzana {
+    width: 75%;
+}
+
+table tr.t1, tr.t2{
+    height: 55px;
+   
+}
+
+table tr.t1 .predavanje_vjezba {
+    text-align: center;
+    padding: 0;
+}
+
+table .prisustvo_da {
+    background-color: rgb(50, 169, 58);
+}
+
+table .prisustvo_ne {
+    background-color: rgb(221, 49, 49);
+}
