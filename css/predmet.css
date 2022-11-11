@@ -1,76 +1,103 @@
 * {
     margin: 0;
-    padding: 0;
 }
 
-nav {
+h1 {
+    padding: 10px 10px;
+    text-align: center;
+}
+
+h2 {
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+a:link {
+    color:#0000EE;
+}
+
+a:visited {
+    color: #0000EE;
+}
+
+.meni {
     width: 100%;
+    background-color: rgba(196, 199, 202, 0.997);
     font-size: 18px;
-    background-color: rgb(229, 234, 234);
-    overflow: hidden;
-    top: 0;
-    position: sticky;
-}
-
-nav .meni_1 {
-    list-style-type: none;
     padding: 10px;
+    justify-content: center;
 }
 
-nav .meni_1 li {
-    float: left;
-    padding: 0 20px;
+ul.meni_1 {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
-nav .meni_2 {
-    padding-left: 10px;
-    list-style-type: none;
+ul.meni_2  {
+    display: block;
+    list-style: none;
 }
 
-nav .meni_2 li {
-    clear: both;
-}
 
 .novi_red {
     grid-column-start: 1;
 }
 
 
-.tabela {
+.tabela{
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
     grid-column-gap: 10px;   
     grid-row-gap: 10px;
     padding: 10px;  
+    background-color: rgb(225, 227, 230);
+    margin: 10px;
 }
 
-.tabela h2 {
-    padding: 20px 10px;
+.tabela  > div {
+    text-align: center;
+    padding: 10px;
 }
 
-h1 {
-    padding: 10px 10px;
+.tabela > div img  {
+    width: 25%
 }
 
 .tabela > div {
-    border: 1px solid;
+    /*border: 1px solid;*/
     text-align: center;
     padding: 10px;
 } 
 
-.tabela .izborni_predmet {
+.izborni_predmet {
     background-color: powderblue;
 }
 
-.tabela .predmet_ne_ide {
+.predmet_ne_ide {
     background-color: gray;
 }
 
-.tabela > div {
-    text-align: center;
-    padding: 10px;
+.redovni_predmet {
+    background-color: white;
 }
 
-.tabela > div img {
-    width: 25%
+
+@media (min-width: 960px) {
+
+    html {
+        scroll-padding-top: 105px;
+    }
+    
+
+    .meni {
+        position: sticky;
+        top: 0;
+    }
+
+    ul.meni_1 {
+        flex-direction: row;
+    }
 }
