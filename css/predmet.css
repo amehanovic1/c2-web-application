@@ -20,6 +20,10 @@ a:visited {
     color: #0000EE;
 }
 
+a:hover {
+    color: antiquewhite;
+}
+
 .meni {
     width: 100%;
     background-color: rgba(196, 199, 202, 0.997);
