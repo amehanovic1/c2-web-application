@@ -46,7 +46,6 @@ ul.meni_2  {
     grid-column-start: 1;
 }
 
-
 .tabela{
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
@@ -86,12 +85,10 @@ ul.meni_2  {
 
 
 @media (min-width: 960px) {
-
     html {
         scroll-padding-top: 105px;
     }
     
-
     .meni {
         position: sticky;
         top: 0;
