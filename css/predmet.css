@@ -9,7 +9,6 @@ h1 {
 
 h2 {
     padding: 10px 10px;
-    justify-content: center;
 }
 
 a:link {
@@ -45,12 +44,11 @@ ul.meni_2  {
     list-style: none;
 }
 
-
 .novi_red {
     grid-column-start: 1;
 }
 
-.tabela{
+.predmeti {
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
     grid-column-gap: 10px;   
@@ -60,17 +58,16 @@ ul.meni_2  {
     margin: 10px;
 }
 
-.tabela  > div {
+.predmeti  > div {
     text-align: center;
     padding: 10px;
 }
 
-.tabela > div img  {
+.predmeti > div img  {
     width: 25%
 }
 
-.tabela > div {
-    /*border: 1px solid;*/
+.predmeti > div {
     text-align: center;
     padding: 10px;
 } 

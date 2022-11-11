@@ -33,12 +33,12 @@ table .sedmica_nije_odrzana {
     width: 75%;
 }
 
-table tr.t1, tr.t2{
+table tr.red_1, tr.red_2{
     height: 55px;
    
 }
 
-table tr.t1 .predavanje_vjezba {
+table tr.red_1 .predavanje_vjezba {
     text-align: center;
     padding: 0;
 }
