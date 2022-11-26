@@ -11,22 +11,22 @@ let prisustvo = TabelaPrisustvo(div, {
     }
     ],
     "prisustva": [{
-    "sedmica": 1,
+    "sedmica": 4,
     "predavanja": 2,
     "vjezbe": 1,
     "index": 12345
     },
     {
-    "sedmica": 4,
+    "sedmica": 2,
     "predavanja": 2,
     "vjezbe": 2,
-    "index": 12346
+    "index": 12345
     },
     {
-    "sedmica": 6,
+    "sedmica": 3,
     "predavanja": 2,
     "vjezbe": 0,
-    "index": 12345
+    "index": 12346
     },
     {
     "sedmica": 2,
