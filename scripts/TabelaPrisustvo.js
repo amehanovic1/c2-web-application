@@ -1,32 +1,26 @@
 let TabelaPrisustvo = function (divRef, podaci) {
     //privatni atributi modula
     //
-    //divRef.textContent = "";
+    divRef.textContent = "";
 
 
     let nazivPredmeta = document.createElement("h1");
     nazivPredmeta.textContent = podaci.predmet;
     divRef.appendChild(nazivPredmeta);
-
-   
-
-    //Zaglavlje 
-    let tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV", "V", "VI", "VII", "VIII - XV"];
-    let tabela = document.createElement("table");
     
+    //naci max sedmicu za sve studente
+    const sedmice = [];
+    for (let i = 0; i < podaci.prisustva.length; i++) {
+        sedmice.push(podaci.prisustva[i].sedmica)
+    }
 
-    // broj sedmica za koje racunamo prisustvo i trenutnu sedmicu
+    let trenutnaSedmica = Math.max.apply(null,sedmice);
+
+    //sedmice za koje racunamo prisustvo 
     const brojSedmica = [];
-    // broj predavnja za trenutnu sedmicu
-    const brojPredavanja = [];
-    // broj vjezbi za  trenutnu sedmicu
-    const brojVjezbi = [];
-
     for(let i = 0; i < podaci.prisustva.length; i++ ) {
         if (podaci.prisustva[i].index === podaci.studenti[0].index) {
             brojSedmica.push(podaci.prisustva[i].sedmica);
-            brojPredavanja.push(podaci.prisustva[i].predavanja);
-            brojVjezbi.push(podaci.prisustva[i].vjezbe);
         }
     }
 
@@ -35,24 +29,61 @@ let TabelaPrisustvo = function (divRef, podaci) {
         return x - y; 
     });
 
+    //broj predavnja i vjezbi za trenutnu sedmicu
+    let brojPredavanja = 0, brojVjezbi = 0;
+    for(let i = 0; i < podaci.prisustva.length; i++ ) {
+        if (podaci.prisustva[i].index === podaci.studenti[0].index && podaci.prisustva[i].sedmica === trenutnaSedmica) {
+            brojPredavanja = podaci.prisustva[i].predavanja;
+            brojVjezbi = podaci.prisustva[i].vjezbe;
+        }
+    }
+
     //zaglavlje
+    let tekst = [];
+    switch(trenutnaSedmica) {
+        case 0:
+            tekst = ["Ime i prezime", "Index", "I - XV"];
+            break;
+        case 1:
+            tekst = ["Ime i prezime", "Index", "I", "II - XV"];
+            break;
+        case 2:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III - XV"];
+            break;
+        case 3:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV - XV"];
+            break;
+        case 4:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV", "V - XV"];
+            break;
+        case 5:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV", "V", "VI - XV"];
+            break;
+        case 6:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV", "V", "VI", "VII - XV"];
+            break;
+        default:
+            tekst = ["Ime i prezime", "Index", "I", "II", "III", "IV", "V", "VI", "VII", "VIII - XV"];
+    }
+
+    let tabela = document.createElement("table");
     let tag, zaglavlje;
     let red = document.createElement("tr");
-    for(let i = 1; i <= 10; i++ ) {
+    for(let i = 0; i < tekst.length; i++ ) {
         tag = document.createElement("th")
-        zaglavlje = document.createTextNode(tekst[i - 1]);
+        zaglavlje = document.createTextNode(tekst[i]);
 
-        if(i > 2 && brojSedmica.length > 0 && (i - 2) === brojSedmica[brojSedmica.length - 1] && brojSedmica.includes(i - 2)){
+        if(i > 1 && i - 1 == trenutnaSedmica ){
             tag.setAttribute("colspan", podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno);
             tag.className = "trenutna_sedmica";
         }
-        else if(i === 10){
+        else if(i === tekst.length - 1){
             tag.className = "sedmica_nije_odrzana";
         }
-        else if(i === 1){
+        else if(i === 0){
             tag.className = "ime_prezime";
         }
-        else if(i === 2){
+        else if(i === 1){
             tag.className = "index";
         }
         else {
@@ -82,13 +113,13 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
     //crtanje kolona za prisustvo
     let noviRed;
-    for(let i = 1; i <= 8; i++ ) {
-        if(brojSedmica.length > 0 && i != brojSedmica[brojSedmica.length - 1] ){
+    for(let i = 1; i <= trenutnaSedmica + 1; i++ ) {
+        if(i != trenutnaSedmica){
             tag = document.createElement("td")
             tag.setAttribute("rowspan", "2");
             //ako nije trenutna sedmica
-            if (brojSedmica.includes(i)) {
-                zaglavlje = document.createTextNode(((brojPredavanja[i - 1] + brojVjezbi[i - 1]) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100 + "%");
+           if (brojSedmica.includes(i)) {
+                zaglavlje = document.createTextNode(((brojPredavanja + brojVjezbi) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100 + "%");
                 tag.appendChild(zaglavlje);
             
             }
@@ -126,29 +157,31 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
 
     //kolona za prisustvo
-    red = document.createElement("tr");
-    red.className = "red_2";
-    for(let j = 0; j < podaci.brojPredavanjaSedmicno; j++) {
-        tag = document.createElement("td");
-        if(j + 1 <= brojPredavanja[brojPredavanja.length - 1] ) {            
-            tag.className = "prisustvo_da";
+    if(trenutnaSedmica != 0){
+        red = document.createElement("tr");
+        red.className = "red_2";
+        for(let j = 1; j <= podaci.brojPredavanjaSedmicno; j++) {
+            tag = document.createElement("td");
+            if(j <= brojPredavanja ) {            
+                tag.className = "prisustvo_da";
+            }
+            else {
+                tag.className = "prisustvo_ne";
+            }
+            red.appendChild(tag);
         }
-        else {
-            tag.className = "prisustvo_ne";
-        }
-        red.appendChild(tag);
-    }
 
-    for(let j = 0; j < podaci.brojVjezbiSedmicno; j++) {
-        tag = document.createElement("td")
-        //za trenutnu sedmicu
-        if(j + 1 <= brojVjezbi[brojVjezbi.length - 1] ) {            
-            tag.className = "prisustvo_da";
+        for(let j = 1; j <= podaci.brojVjezbiSedmicno; j++) {
+            tag = document.createElement("td")
+            //za trenutnu sedmicu
+            if(j <= brojVjezbi ) {            
+                tag.className = "prisustvo_da";
+            }
+            else {
+                tag.className = "prisustvo_ne";
+            }
+            red.appendChild(tag);
         }
-        else {
-            tag.className = "prisustvo_ne";
-        }
-        red.appendChild(tag);
     }
     tabela.appendChild(red);
 
