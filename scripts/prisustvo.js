@@ -17,22 +17,22 @@ let prisustvo = TabelaPrisustvo(div, {
     "index": 12345
     },
     {
-    "sedmica": 0,
+    "sedmica": 4,
     "predavanja": 2,
     "vjezbe": 2,
     "index": 12346
     },
     {
-    "sedmica": 2,
+    "sedmica": 6,
     "predavanja": 2,
     "vjezbe": 0,
     "index": 12345
     },
     {
-    "sedmica": 7,
+    "sedmica": 2,
     "predavanja": 2,
     "vjezbe": 0,
-    "index": 12345
+    "index": 12346
     }
     ],
     "predmet": "Razvoj mobilnih aplikacija",
