@@ -100,11 +100,19 @@ let TabelaPrisustvo = function (divRef, podaci) {
     var dugmePrethodnaSedmica = document.createElement("button");
     var iconPrethodna = document.createElement("i");
     iconPrethodna.className = 'fa fa-solid fa-arrow-left fa-2x';
+    dugmePrethodnaSedmica.onclick = function () {
+        prethodnaSedmica();
+        crtanjeTabele(trenutnaSedmica);
+    }
     dugmePrethodnaSedmica.appendChild(iconPrethodna);
 
     var dugmeSljedecaSedmica = document.createElement("button");
     var iconSljedeca = document.createElement("i");
     iconSljedeca.className = 'fa fa-solid fa-arrow-right fa-2x';
+    dugmeSljedecaSedmica.onclick = function () {
+        sljedecaSedmica();
+        crtanjeTabele(trenutnaSedmica);
+    }
     dugmeSljedecaSedmica.appendChild(iconSljedeca);
 
     if(Math.max.apply(null, predavanja) > podaci.brojPredavanjaSedmicno || Math.max.apply(null, vjezbe) > podaci.brojVjezbiSedmicno
@@ -128,7 +136,6 @@ let TabelaPrisustvo = function (divRef, podaci) {
         nazivPredmeta.textContent = podaci.predmet;
         divRef.appendChild(nazivPredmeta);
 
-        //tekst
         let tekstZaglavlja = [];
         switch(trenutnaSedmicaDefault) {
             case 0:
@@ -252,7 +259,7 @@ let TabelaPrisustvo = function (divRef, podaci) {
                     dodavanjeTaga.setAttribute("rowspan", "2");
                     //ako nije trenutna sedmica a ima prisustvo
                     if (sedmicePrisustva.includes(j)) {
-                        tekst = document.createTextNode(((brojPredavanja + brojVjezbi) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100 + "%");
+                        tekst = document.createTextNode(Math.round(((brojPredavanja + brojVjezbi) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100) + "%");
                         dodavanjeTaga.appendChild(tekst);
                     }
                     red.appendChild(dodavanjeTaga);
@@ -325,16 +332,10 @@ let TabelaPrisustvo = function (divRef, podaci) {
     }
 
     let sljedecaSedmica = function () {
-        dugmeSljedecaSedmica.onclick = function () {
-            if(trenutnaSedmica < trenutnaSedmicaDefault) trenutnaSedmica += 1;
-            crtanjeTabele(trenutnaSedmica);
-        }
+        if(trenutnaSedmica < trenutnaSedmicaDefault) trenutnaSedmica += 1;
     }
     let prethodnaSedmica = function () {
-        dugmePrethodnaSedmica.onclick = function () {
-            if(trenutnaSedmica > 1) trenutnaSedmica -=1;
-            crtanjeTabele(trenutnaSedmica);
-        }
+        if(trenutnaSedmica > 1) trenutnaSedmica -=1;
     }
     return {
         sljedecaSedmica: sljedecaSedmica,

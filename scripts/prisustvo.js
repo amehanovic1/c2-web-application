@@ -24,7 +24,7 @@ let prisustvo = TabelaPrisustvo(div, {
     "sedmica": 9,
     "predavanja": 2,
     "vjezbe": 2,
-    "index": 12345
+    "index": 12346
     },
     {
     "sedmica": 6,
@@ -45,7 +45,7 @@ let prisustvo = TabelaPrisustvo(div, {
     "index": 12346
     },
     {
-    "sedmica": 7,
+    "sedmica": 10,
     "predavanja": 1,
     "vjezbe": 1,
     "index": 12345
