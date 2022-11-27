@@ -1,7 +1,8 @@
 let TabelaPrisustvo = function (divRef, podaci) {
+
+    if(divRef === null || podaci === null) return;
     divRef.textContent = "";
 
-    //sve sedmice
     var sedmice = [];
     for (let i = 0; i < podaci.prisustva.length; i++) {
         if(!sedmice.includes(podaci.prisustva[i].sedmica)) {
@@ -102,7 +103,6 @@ let TabelaPrisustvo = function (divRef, podaci) {
     iconPrethodna.className = 'fa fa-solid fa-arrow-left fa-2x';
     dugmePrethodnaSedmica.onclick = function () {
         prethodnaSedmica();
-        crtanjeTabele(trenutnaSedmica);
     }
     dugmePrethodnaSedmica.appendChild(iconPrethodna);
 
@@ -111,7 +111,6 @@ let TabelaPrisustvo = function (divRef, podaci) {
     iconSljedeca.className = 'fa fa-solid fa-arrow-right fa-2x';
     dugmeSljedecaSedmica.onclick = function () {
         sljedecaSedmica();
-        crtanjeTabele(trenutnaSedmica);
     }
     dugmeSljedecaSedmica.appendChild(iconSljedeca);
 
@@ -122,11 +121,10 @@ let TabelaPrisustvo = function (divRef, podaci) {
         let poruka = document.createElement("p");
         poruka.textContent = "Podaci o prisustvu nisu validni!";
         divRef.appendChild(poruka);
-    }
-    else {
-        crtanjeTabele(trenutnaSedmicaDefault);
+        return;
     }
 
+    crtanjeTabele(trenutnaSedmica);
 
     function crtanjeTabele(trenutna) {
         if(trenutna < 1 || trenutna > trenutnaSedmicaDefault) return;
@@ -192,7 +190,7 @@ let TabelaPrisustvo = function (divRef, podaci) {
             dodavanjeTaga = document.createElement("th")
             tekst = document.createTextNode(tekstZaglavlja[i]);
 
-            if(i > 1 && i - 1 == trenutna){
+            if(i > 1 && (i - 1) === trenutna){
                 dodavanjeTaga.setAttribute("colspan", podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno);
                 dodavanjeTaga.className = "trenutna_sedmica";
             }
@@ -217,16 +215,14 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
         
         for(let i = 0; i < podaci.studenti.length; i++) {
-            //broj predavnja i vjezbi za trenutnog studenta
+            //broj predavanja i vjezbi za trenutnog studenta
             let brojPredavanja = 0, brojVjezbi = 0;
-
             for(let j = 0; j < podaci.prisustva.length; j++ ) {
-                if (podaci.prisustva[j].index === podaci.studenti[i].index) {
+                if (podaci.prisustva[j].index === podaci.studenti[i].index && podaci.prisustva[j].sedmica === trenutna) {
                     brojPredavanja = podaci.prisustva[j].predavanja;
                     brojVjezbi = podaci.prisustva[j].vjezbe;
                 }
             }
-
             //sedmice prisustva za trenutnog studenta
             const sedmicePrisustva = [];
             for(let j = 0; j < podaci.prisustva.length; j++ ) {
@@ -257,30 +253,39 @@ let TabelaPrisustvo = function (divRef, podaci) {
                 if(j != trenutna){
                     dodavanjeTaga = document.createElement("td")
                     dodavanjeTaga.setAttribute("rowspan", "2");
-                    //ako nije trenutna sedmica a ima prisustvo
+                    
+                    //ako nije trenutna sedmica a ima prisustvo, procenti za studenta
                     if (sedmicePrisustva.includes(j)) {
-                        tekst = document.createTextNode(Math.round(((brojPredavanja + brojVjezbi) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100) + "%");
+                        let brojPredavanjaStudent = 0; let brojVjezbiStudent = 0;
+                        for(let k = 0; k < podaci.prisustva.length; k++ ) {
+                            if (j === podaci.prisustva[k].sedmica && podaci.prisustva[k].index === podaci.studenti[i].index) {
+                                brojPredavanjaStudent = podaci.prisustva[k].predavanja;
+                                brojVjezbiStudent = podaci.prisustva[k].vjezbe;
+                            }
+                        }
+
+                        tekst = document.createTextNode(Math.round(((brojPredavanjaStudent + brojVjezbiStudent) / (podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno)) * 100) + "%");
                         dodavanjeTaga.appendChild(tekst);
                     }
                     red.appendChild(dodavanjeTaga);
                 }
                 else {
-                    for(let j = 0; j < podaci.brojPredavanjaSedmicno; j++) {
+                    for(let k = 0; k < podaci.brojPredavanjaSedmicno; k++) {
                         dodavanjeTaga = document.createElement("td");
                         dodavanjeTaga.className = "predavnje_vjezba";
                         tekst = document.createTextNode("P");
                         dodavanjeTaga.appendChild(tekst);
                         dodavanjeTaga.appendChild(document.createElement("br"));
-                        dodavanjeTaga.appendChild(document.createTextNode(j + 1));
+                        dodavanjeTaga.appendChild(document.createTextNode(k + 1));
                         red.appendChild(dodavanjeTaga);
                     }
-                    for(let j = 0; j < podaci.brojVjezbiSedmicno; j++) {
+                    for(let k = 0; k < podaci.brojVjezbiSedmicno; k++) {
                         dodavanjeTaga = document.createElement("td");
                         dodavanjeTaga.className = "predavnje_vjezba";
                         tekst = document.createTextNode("V");
                         dodavanjeTaga.appendChild(tekst);
                         dodavanjeTaga.appendChild(document.createElement("br"));
-                        dodavanjeTaga.appendChild(document.createTextNode(j + 1));
+                        dodavanjeTaga.appendChild(document.createTextNode(k + 1));
                         red.appendChild(dodavanjeTaga);
                     }
                 }
@@ -332,10 +337,16 @@ let TabelaPrisustvo = function (divRef, podaci) {
     }
 
     let sljedecaSedmica = function () {
-        if(trenutnaSedmica < trenutnaSedmicaDefault) trenutnaSedmica += 1;
+        if(trenutnaSedmica < trenutnaSedmicaDefault) {
+            trenutnaSedmica += 1;
+            crtanjeTabele(trenutnaSedmica);
+        }
     }
     let prethodnaSedmica = function () {
-        if(trenutnaSedmica > 1) trenutnaSedmica -=1;
+        if(trenutnaSedmica > 1) {
+            trenutnaSedmica -= 1;
+            crtanjeTabele(trenutnaSedmica);
+        }
     }
     return {
         sljedecaSedmica: sljedecaSedmica,
