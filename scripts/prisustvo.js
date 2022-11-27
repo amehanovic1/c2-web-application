@@ -8,6 +8,10 @@ let prisustvo = TabelaPrisustvo(div, {
     {
     "ime": "Drugi Neko",
     "index": 12346
+    },
+    {
+    "ime": "Treci Neko",
+    "index": 12348
     }
     ],
     "prisustva": [{
@@ -33,6 +37,18 @@ let prisustvo = TabelaPrisustvo(div, {
     "predavanja": 2,
     "vjezbe": 0,
     "index": 12346
+    },
+    {
+    "sedmica": 9,
+    "predavanja": 0,
+    "vjezbe": 1,
+    "index": 12346
+    },
+    {
+    "sedmica": 9,
+    "predavanja": 1,
+    "vjezbe": 1,
+    "index": 12345
     }
     ],
     "predmet": "Razvoj mobilnih aplikacija",

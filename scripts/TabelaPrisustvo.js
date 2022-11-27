@@ -13,12 +13,12 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
     var prethodnaDugme = document.createElement("button");
     var icon = document.createElement("i");
-    icon.className = 'fa fa-solid fa-arrow-left';
+    icon.className = 'fa fa-solid fa-arrow-left fa-2x';
     prethodnaDugme.appendChild(icon);
 
     var sljedecaDugme = document.createElement("button");
     var icon = document.createElement("i");
-    icon.className = 'fa fa-solid fa-arrow-right';
+    icon.className = 'fa fa-solid fa-arrow-right fa-2x';
     sljedecaDugme.appendChild(icon);
 
     let trenutnaSedmica = Math.max.apply(null,sedmice);
@@ -343,9 +343,6 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
             divRef.appendChild(document.createElement("br"));
             divRef.appendChild(prethodnaDugme);
-
-            divRef.appendChild(document.createElement("br"));
-            divRef.appendChild(document.createElement("br"));
             divRef.appendChild(sljedecaDugme);
         }
     }
