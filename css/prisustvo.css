@@ -53,3 +53,8 @@ table .prisustvo_da {
 table .prisustvo_ne {
     background-color: rgb(221, 49, 49);
 }
+
+button {
+    width: 50px;
+    height: 50px;
+}
