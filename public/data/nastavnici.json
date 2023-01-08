@@ -1,8 +1,8 @@
 [
     {
         "nastavnik": {
-            "username": "USERNAME",
-            "password_hash": "PASSWORDHASH"
+            "username": "amehanovic2",
+            "password_hash": "password"
         },
         "predmeti": [
             "PREDMET1",
@@ -18,6 +18,6 @@
         "predmeti": [
             "PREDMET1"
         ]
-    }
+}
 ]
     
