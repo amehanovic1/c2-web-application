@@ -11,16 +11,19 @@ const PoziviAjax = (()=>{
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
                 //fnCallback(null, jsonRez.status);
-                if(jsonRez.error != null) {
+                if(jsonRez.poruka != "Nastavnik nije loginovan") {
+                    fnCallback(null, jsonRez); 
+                }
+                /*if(jsonRez.error != null) {
                     fnCallback(jsonRez.data, null);
                 }
                 else {
                     fnCallback(null, jsonRez);
-                }
-            
+                }*/
             }
-            if(ajax.readyState == 4)
+            if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
+            }
         }
         ajax.open("GET", "http://localhost:3000/predmeti", true);
         ajax.send();

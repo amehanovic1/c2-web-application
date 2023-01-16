@@ -96,7 +96,7 @@ app.get('/predmeti', function(req, res) {
         res.json(predmeti);
     }
     else {
-        res.json({greska: "Nastavnik nije loginovan"});
+        res.json({"greska": "Nastavnik nije loginovan"});
     }
 });
 

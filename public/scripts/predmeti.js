@@ -21,5 +21,10 @@ window.onload = function() {
 
     PoziviAjax.getPredmeti(function(error, data){
        //ispisati listu predmeta
+       var ul = document.createElement("ul");
+       for(let i = 0; i < data.length; i++) {
+        ul.innerHTML = ul.innerHTML + "<li>" + data[i] + "</li>"
+       }
+       document.getElementById("predmeti").appendChild(ul);
     });
 }
