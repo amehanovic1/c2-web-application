@@ -39,7 +39,7 @@ fs.readFile('./public/data/nastavnici.json', 'utf8', (error, data) => {
 
 function uspjesanLogin (username, password) {
     for(let i = 0; i < nastavnici.length; i++) {
-        if(username == nastavnici[i].nastavnik.username && password == nastavnici[i].nastavnik.password) {
+        if(username == nastavnici[i].nastavnik.username && password == nastavnici[i].nastavnik.password_hash) {
             return true;
         }
     }
@@ -47,30 +47,20 @@ function uspjesanLogin (username, password) {
 }
 
 app.post('/login', function(req, res) {
-    if(uspjesanLogin) {
+    if(uspjesanLogin(req.body.username, req.body.password)) {
         req.session.username = req.body.username;
         for(let i = 0; i < nastavnici.length; i++) {
             if(req.body.username == nastavnici[i].nastavnik.username) {
                 req.session.predmeti = nastavnici[i].predmeti;
             }
         }
-        res.json({poruka: "Uspjesna prijava"});
+        res.json({"poruka": "Uspjesna prijava"});
     }
     else {
-        res.json({poruka: "Neuspjesna prijava"});
+        res.json({"poruka": "Neuspjesna prijava"});
     }
-    /*else {
-        //res.redirect('/login');
-        res.json({poruka: "Neuspjesan login..."});
-    }*/
-    //res.json({poruka:"Uspješno dodan red"});
-    //res.send('Dobrodosli!');
-    //res.end();
-    /*
-    let username, password, poruka = "";
-    username = req.body.username;
-    password = req.body.password_hash;
-    */
+
+    
     /*if(req.session) {
         username = req.body.username;
         password = req.body.password;
@@ -99,13 +89,10 @@ app.get('/predmeti', function(req, res) {
     if(req.session) {
         let predmeti = [];
         for(let i = 0; i < nastavnici.length; i++) {
-            //console.log("USERNAME: " + jsonRez[i].nastavnik.username);
             if(req.session.username == nastavnici[i].nastavnik.username) {
                 predmeti = nastavnici[i].predmeti;
             }
-                //console.log("PREDMETI: " + req.session.predmeti);
         }
-       // console.log("SESIJA: " + predmeti);
         res.json(predmeti);
     }
     else {

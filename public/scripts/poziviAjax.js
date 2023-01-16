@@ -34,8 +34,12 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                window.location.href = '/predmeti.html';
-                //fnCallback(null, jsonRez.status);
+                if(jsonRez.poruka === "Uspjesna prijava") {
+                    window.location.href = '/predmeti.html';
+                }
+                else {
+                    fnCallback(null, jsonRez.poruka);
+                }
                 /*
                 if(jsonRez.error != null) {
                     fnCallback(jsonRez.data, null);
@@ -45,8 +49,9 @@ const PoziviAjax = (()=>{
                 }
                 */
             }
-            if(ajax.readyState == 4)
+            else if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
+            }
         }
         ajax.open("POST", "http://localhost:3000/login", true);
         ajax.setRequestHeader("Content-Type", "application/json");
@@ -58,6 +63,7 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
+                
                 window.location.href = '/prijava.html';
                 //fnCallback(null, jsonRez.status);
                 /*

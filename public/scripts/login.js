@@ -5,5 +5,7 @@ function prijavi() {
     submit.addEventListener("click", function() {
         PoziviAjax.postLogin(username, password, function(error, data){});
     })*/
-    PoziviAjax.postLogin(username, password, function(error, data){});
+    PoziviAjax.postLogin(username, password, function(error, data){
+        document.getElementById("greska").innerHTML = data;
+    });
 }
