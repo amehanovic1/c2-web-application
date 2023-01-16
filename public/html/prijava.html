@@ -4,27 +4,21 @@
     <head>
         <title> Prijava </title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--dodano -->
+        <link rel="shortcut icon" href="#">
     </head>
 
     <body>
-        <form action="#">
+
+        <form>
             <label for="username"> Username: </label><br>
             <input type="text" id="username" name="username"><br>
             <label for="password"> Password: </label><br>
             <input type="password" id="password" name="password"><br><br>
-            <input type="button" id="submit" value="Submit" onclick="PoziviAjax.postLogin()">
+            <input type="button" id="submit" value="Submit" onclick="prijavi()">
         </form>
-        <!-- <script>
-            function prijavi() {
-                username = document.getElementById("username");
-                password = document.getElementById("password");
-                submit = document.getElementById("submit");
-                submit.addEventListener("click", function() {
-                    postLogin(username, password, function(error, data){});
-                })
-            }
-        </script> -->
     
         <script src="../scripts/poziviAjax.js"></script>
+        <script src="../scripts/login.js"></script>
     </body>
 </html>

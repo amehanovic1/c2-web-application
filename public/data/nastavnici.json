@@ -2,7 +2,7 @@
     {
         "nastavnik": {
             "username": "amehanovic2",
-            "password_hash": "password"
+            "password_hash": "12345"
         },
         "predmeti": [
             "PREDMET1",
