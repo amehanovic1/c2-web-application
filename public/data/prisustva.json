@@ -8,7 +8,7 @@
             "ime": "Drugi Neko",
             "index": 12346
         }],
-    "   prisustva": [{
+    "prisustva": [{
             "sedmica": 1,
             "predavanja": 2,
             "vjezbe": 1,
@@ -32,7 +32,7 @@
             "vjezbe": 0,
             "index": 12346
         }],
-        "predmet": "Razvoj mobilnih aplikacija",
+        "predmet": "PREDMET1",
         "brojPredavanjaSedmicno": 2,
         "brojVjezbiSedmicno": 2
     }

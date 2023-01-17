@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+}
+
+#meni {
+    width: 100%;
+    background-color: rgba(196, 199, 202, 0.997);
+    font-size: 16px;
+    padding: 10px;
+    justify-content: left;
+    /*display: flex;*/
+    /*overflow: auto;*/
+}
+
+li  {
+    list-style: none;
+    padding: 10px;
+    display: inline-block;
+}
+
+button {
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+

@@ -3,15 +3,12 @@ const PoziviAjax = (()=>{
     // svaki callback kao parametre ima error i data, error je null ako je status 200 i data je tijelo odgovora
     // ako postoji greška poruka se prosljeđuje u error parametar callback-a, a data je tada null
     function impl_getPredmet(naziv,fnCallback){
-    }
-    // vraća listu predmeta za loginovanog nastavnika ili grešku da nastavnik nije loginovan
-    function impl_getPredmeti(fnCallback){
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
                 //fnCallback(null, jsonRez.status);
-                if(jsonRez.poruka != "Nastavnik nije loginovan") {
+                if(jsonRez.greska != "Nastavnik nije loginovan") {
                     fnCallback(null, jsonRez); 
                 }
                 /*if(jsonRez.error != null) {
@@ -21,7 +18,31 @@ const PoziviAjax = (()=>{
                     fnCallback(null, jsonRez);
                 }*/
             }
-            if(ajax.readyState == 4) {
+            else if(ajax.readyState == 4) {
+                fnCallback(ajax.statusText, null);
+            }
+        }
+        ajax.open("GET", "http://localhost:3000/predmeti/" + naziv, true);
+        ajax.send();
+    }
+    // vraća listu predmeta za loginovanog nastavnika ili grešku da nastavnik nije loginovan
+    function impl_getPredmeti(fnCallback){
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function() {
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                var jsonRez = JSON.parse(ajax.responseText);
+                //fnCallback(null, jsonRez.status);
+                if(jsonRez.greska != "Nastavnik nije loginovan") {
+                    fnCallback(null, jsonRez); 
+                }
+                /*if(jsonRez.error != null) {
+                    fnCallback(jsonRez.data, null);
+                }
+                else {
+                    fnCallback(null, jsonRez);
+                }*/
+            }
+            else if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
             }
         }
