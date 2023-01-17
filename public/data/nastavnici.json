@@ -5,9 +5,9 @@
             "password_hash": "12345"
         },
         "predmeti": [
-            "PREDMET1",
-            "PREDMET2",
-            "PREDMET3"
+            "Web tehnologije",
+            "Računarska grafika",
+            "Verifikacija i validacija softvera"
         ]
     },
     {
