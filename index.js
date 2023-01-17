@@ -107,7 +107,7 @@ app.get('/predmeti/:naziv', function(req, res) {
         fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
             if (error) throw error;
             let jsonObject = JSON.parse(data);
-            console.log(jsonObject[0].studenti.length);
+            
             let nazivPredmeta = req.params.naziv;
             for(let i = 0; i < jsonObject.length; i++) {
                 if(jsonObject[i].predmet === nazivPredmeta) {
