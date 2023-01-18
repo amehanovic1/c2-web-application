@@ -2,7 +2,7 @@
     {
         "nastavnik": {
             "username": "amehanovic2",
-            "password_hash": "12345"
+            "password_hash": "$2b$10$Lp3gP9GA/OhfURK4NYiia.xMLkahboqoaSufK0.soSG8RWGgKaQce"
         },
         "predmeti": [
             "Web tehnologije",
@@ -12,11 +12,11 @@
     },
     {
         "nastavnik": {
-            "username": "USERNAME2",
-            "password_hash": "PASSWORDHASH2"
+            "username": "username",
+            "password_hash": "$2b$10$2i4r8CFEsKp9JBDcjQ0dhOv6RIDFUJlf.iYm/5m7hv/.O/rrvwF4y"
         },
         "predmeti": [
-            "PREDMET1"
+            "Web tehnologije"
         ]
 }
 ]

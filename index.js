@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const fs = require('fs');
+const bcrypt = require('bcrypt')
 const path = require('path');
 const app = express();
 
@@ -37,16 +38,16 @@ fs.readFile('./public/data/nastavnici.json', 'utf8', (error, data) => {
 
 function uspjesanLogin (username, password) {
     for(let i = 0; i < nastavnici.length; i++) {
-        if(username == nastavnici[i].nastavnik.username && password == nastavnici[i].nastavnik.password_hash) {
+        /*bcrypt.hash(nastavnici[i].nastavnik.password_hash, 10, function(err, hash) {
+            console.log("Korisnik: " + nastavnici[i].nastavnik.username + " | Sifra: "  + hash);
+        });*/
+        const passwordOdgovara = bcrypt.compare(password, nastavnici[i].nastavnik.password_hash);
+        if(username == nastavnici[i].nastavnik.username && passwordOdgovara) {
             return true;
         }
     }
     return false;
 }
-
-/*bcrypt.hash(plaintextPassword, 10, function(err, hash) {
-
-});*/
 
 app.post('/login', function(req, res) {
     if(uspjesanLogin(req.body.username, req.body.password)) {
