@@ -1,34 +1,31 @@
 //window.onload = function() {
-    let div = document.getElementById("meni");
+    let divMeni = document.getElementById("divMeni");
 
+    //ispis liste predmeta u meni
     PoziviAjax.getPredmeti(function(error, data){
-       //ispisati listu predmeta
        var ul = document.createElement("ul"); 
        for(let i = 0; i < data.length; i++) {
         ul.innerHTML = ul.innerHTML + "<li>" + data[i] + "</li>"
        }
-       div.appendChild(ul);   
+       divMeni.appendChild(ul);   
 
-       let tabela = document.getElementById("divSadrzaj");
+       let divTabela = document.getElementById("divTabela");
 
-       var lista = document.querySelectorAll("li");
-       for(let i = 0; i< lista.length; i++){
-           lista[i].addEventListener("click", function() {+
-               PoziviAjax.getPredmet(lista[i].innerHTML, function(error, data) {
-                 TabelaPrisustvo(tabela, data);
-               })
-           });
-       }
-   
+       var predmeti = document.querySelectorAll("li");
+       for(let i = 0; i < predmeti.length; i++){
+        predmeti[i].addEventListener("click", function() {
+            PoziviAjax.getPredmet(predmeti[i].innerHTML, function(error, data) {
+                TabelaPrisustvo(divTabela, data);})
+            });
+        }
     });
 
-    //kreiranje buttona za logout
+    //kreiranje button-a za logout
     let btnLogout = document.createElement("button");
-    btnLogout.innerHTML = "Logout";
+    btnLogout.innerHTML = "Odjava";
     btnLogout.addEventListener("click", function() {
-        PoziviAjax.postLogout(function(error, data) {
-        });
+        PoziviAjax.postLogout(function(error, data) {});
     })
     btnLogout.setAttribute("class", "btnLogout");
-    div.appendChild(btnLogout);
+    divMeni.appendChild(btnLogout);
 //}

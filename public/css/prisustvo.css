@@ -76,39 +76,45 @@ button {
     margin: 0;
 }
 
-#meni {
+#divMeni {
     width: 100%;
-    height: 50px;
-    background-color: rgba(208, 210, 212, 0.997);
+    min-height: 50px;
+    background-color: rgb(230, 240, 249);
     font-size: 16px;
-    padding: 10px;
-    justify-content: left;
+    padding-top: 5px;
+    justify-content: center;
 }
 
-li  {
+ul {
+    display: flex;
     list-style: none;
-    padding: 10px;
-    display: inline-block;
     cursor: pointer;
 }
 
+li {
+    font-size: 17px;
+    padding: 10px;
+}
+
 li:hover {
-    background-color: rgb(240, 234, 234);
+    background-color: rgb(104, 151, 194);
+    color: white;
 }
 
 .btnLogout {
     border: none;
-    width: 80px;
-    /*height: 50px;*/
-    /*padding: 10px;*/
-    margin-top: 10px;
-    font-size: 16px;
-    background-color: rgba(208, 210, 212, 0.997);
+    width: 100px;
+    height: 40px;
+    font-size: 15px;
+    background-color: rgb(179, 205, 229);
     position: absolute;
+    margin-top: 5px;
     top: 0;
     right: 0;
+    margin-right: 5px;
 }
 
 .btnLogout:hover {
-    background-color: rgb(240, 234, 234);
+    background-color: rgb(104, 151, 194);
+    color: white; 
 }

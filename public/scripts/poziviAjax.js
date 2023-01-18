@@ -31,7 +31,6 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                //fnCallback(null, jsonRez.status);
                 if(jsonRez.greska != "Nastavnik nije loginovan") {
                     fnCallback(null, jsonRez); 
                 }
@@ -51,14 +50,12 @@ const PoziviAjax = (()=>{
     }
     
     function impl_postLogin(username, password, fnCallback){
-       const data = {username: username, password: password};
-         /*data.username = username;
-        data.password = password;*/
+        const data = {username: username, password: password};
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                if(jsonRez.poruka === "Uspjesna prijava") {
+                if(jsonRez.poruka === "Uspješna prijava") {
                     window.location.href = '/predmeti.html';
                 }
                 else {
@@ -116,10 +113,9 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                let div = document.getElementById("divSadrzaj");
-                //window.location.href = '/prijava.html';
-                fnCallback(null, jsonRez);
-                TabelaPrisustvo(div, jsonRez);
+                let divTabela = document.getElementById("divTabela");
+                //fnCallback(null, jsonRez);
+                TabelaPrisustvo(divTabela, jsonRez);
                 /*
                 if(jsonRez.error != null) {
                     fnCallback(jsonRez.data, null);

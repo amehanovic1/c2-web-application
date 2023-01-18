@@ -3,7 +3,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const fs = require('fs');
 const bcrypt = require('bcrypt')
-const path = require('path');
+//const path = require('path');
 const app = express();
 
 app.use(bodyParser.json());
@@ -14,7 +14,6 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-
 
 app.use(express.static(__dirname + '/public'));
 //app.use(express.static(path.join(__dirname, 'public')));
@@ -57,10 +56,10 @@ app.post('/login', function(req, res) {
                 req.session.predmeti = nastavnici[i].predmeti;
             }
         }
-        res.json({"poruka": "Uspjesna prijava"});
+        res.json({"poruka": "Uspješna prijava"});
     }
     else {
-        res.json({"poruka": "Neuspjesna prijava"});
+        res.json({"poruka": "Neuspješna prijava"});
     }
 
     
@@ -101,13 +100,13 @@ app.get('/predmeti', function(req, res) {
     }
 });
 
-//kao rezultat poziva dobija se lista prisustva u json formatu za navedenni predmet
+//kao rezultat poziva dobija se lista prisustva u json formatu za navedeni predmet
 app.get('/predmeti/:naziv', function(req, res) {
+    //provjera da li je nastavnik loginovan
     if(req.session) {
         fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
             if (error) throw error;
             let jsonRez = JSON.parse(data);
-
             let nazivPredmeta = req.params.naziv;
             for(let i = 0; i < jsonRez.length; i++) {
                 if(jsonRez[i].predmet === nazivPredmeta) {
