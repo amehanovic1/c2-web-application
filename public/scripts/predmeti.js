@@ -1,4 +1,4 @@
-window.onload = function() {
+//window.onload = function() {
     let div = document.getElementById("meni");
 
     PoziviAjax.getPredmeti(function(error, data){
@@ -31,4 +31,4 @@ window.onload = function() {
     })
     btnLogout.setAttribute("class", "btnLogout");
     div.appendChild(btnLogout);
-}
+//}

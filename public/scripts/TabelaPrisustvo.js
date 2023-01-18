@@ -295,37 +295,119 @@ let TabelaPrisustvo = function (divRef, podaci) {
             //kolone za prisustvo
             red = document.createElement("tr");
             red.className = "red_2";
-
-            if(sedmicePrisustva.includes(trenutna)) {
+           
+            //if(sedmicePrisustva.includes(trenutna)) {
+                
                 for(let j = 1; j <= podaci.brojPredavanjaSedmicno; j++) {
-                    dodavanjeTaga = document.createElement("td");
-                    if(j <= brojPredavanja ) {            
-                        dodavanjeTaga.className = "prisustvo_da";
+                    let prisustvoPredavanja = document.createElement("td");
+                    //dodano
+                    prisustvoPredavanja.addEventListener("click", function () {
+                        let brojacPredavanja = brojPredavanja;
+                        let brojacVjezbi = brojVjezbi;
+                        if(prisustvoPredavanja.className === "prisustvo_nije_uneseno") {
+                            prisustvoPredavanja.className = "prisustvo_da";
+                            brojacPredavanja = 1;
+                            brojacVjezbi = 0;
+                        }
+                        else {
+                            if(prisustvoPredavanja.className === "prisustvo_da") {
+                                prisustvoPredavanja.className = "prisustvo_ne";
+                                brojacPredavanja = brojacPredavanja - 1;
+                            }
+                            else {
+                                prisustvoPredavanja.className = "prisustvo_da";
+                                brojacPredavanja = brojacPredavanja + 1;
+                            }
+                        }
+                        let prisustva = {sedmica: trenutna, predavanja: brojacPredavanja, vjezbe: brojacVjezbi}
+                        PoziviAjax.postPrisustvo(podaci.predmet, podaci.studenti[i].index, prisustva, function(error, data) {});
+                    });
+                    //dodano
+                    if(sedmicePrisustva.includes(trenutna)) {
+                        if(j <= brojPredavanja ) {            
+                            prisustvoPredavanja.className = "prisustvo_da";
+                        }
+                        else {
+                            prisustvoPredavanja.className = "prisustvo_ne";
+                        }
                     }
-                    else {
-                        dodavanjeTaga.className = "prisustvo_ne";
-                    }
-                    red.appendChild(dodavanjeTaga);
+                    else  {
+                        prisustvoPredavanja.className = "prisustvo_nije_uneseno";
+                    } 
+                    red.appendChild(prisustvoPredavanja);
                 }
 
                 for(let j = 1; j <= podaci.brojVjezbiSedmicno; j++) {
-                    dodavanjeTaga = document.createElement("td");
-                    if(j <= brojVjezbi ) {            
-                        dodavanjeTaga.className = "prisustvo_da";
+                    let prisustvoVjezbe = document.createElement("td");
+                    //dodano
+                    prisustvoVjezbe.addEventListener("click", function () {
+                        let brojacPredavanja = brojPredavanja;
+                        let brojacVjezbi = brojVjezbi;
+                        if(prisustvoVjezbe.className === "prisustvo_nije_uneseno") {
+                            prisustvoVjezbe.className = "prisustvo_da";
+                            brojacVjezbi = 1;
+                            brojacPredavanja = 0;
+                        }
+                        else {
+                            if(prisustvoVjezbe.className === "prisustvo_da") {
+                                prisustvoVjezbe.className = "prisustvo_ne";
+                                brojacVjezbi = brojVjezbi - 1;
+                            }
+                            else {
+                                prisustvoVjezbe.className = "prisustvo_da";
+                                brojacVjezbi = brojVjezbi + 1;
+                            }
+                        }
+                        let prisustva = {sedmica: trenutna, predavanja: brojacPredavanja, vjezbe: brojacVjezbi}
+                        PoziviAjax.postPrisustvo(podaci.predmet, podaci.studenti[i].index, prisustva, function(error, data) {});
+                    });
+                    //dodano
+                    if(sedmicePrisustva.includes(trenutna)) {
+                        if(j <= brojVjezbi ) {            
+                            prisustvoVjezbe.className = "prisustvo_da";
+                        }
+                        else {
+                            prisustvoVjezbe.className = "prisustvo_ne";
+                        } 
                     }
                     else {
-                        dodavanjeTaga.className = "prisustvo_ne";
+                        prisustvoVjezbe.className = "prisustvo_nije_uneseno";
                     }
-                    red.appendChild(dodavanjeTaga);
+                    red.appendChild(prisustvoVjezbe);
                 }
-            }
+          /*  }
             else {
                 for(let j = 1; j <= podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno; j++) {
-                    dodavanjeTaga = document.createElement("td");         
-                    dodavanjeTaga.style.backgroundColor = "white";
-                    red.appendChild(dodavanjeTaga);
+                    let nijeUnesenoPrisustvo = document.createElement("td");   
+                    nijeUnesenoPrisustvo.className = "prisustvo_nije_uneseno";   
+                    nijeUnesenoPrisustvo.addEventListener("click", function () {
+                        //nije uneseno prisustvo
+                        let brojacPredavanja = 0;
+                        let brojacVjezbi = 0;
+                        if(nijeUnesenoPrisustvo.className === "prisustvo_nije_uneseno") {
+                            nijeUnesenoPrisustvo.className = "prisustvo_da";
+                            if(j <= podaci.brojPredavanjaSedmicno ) brojacPredavanja = brojacPredavanja + 1;
+                            else brojacVjezbi = brojVjezbi + 1;
+                        }
+                        else {
+                            if(nijeUnesenoPrisustvo.className === "prisustvo_da") {
+                                nijeUnesenoPrisustvo.className = "prisustvo_ne";
+                                if(j <= podaci.brojPredavanjaSedmicno ) brojacPredavanja = brojacPredavanja - 1;
+                                else brojacVjezbi = brojVjezbi - 1;
+                            }
+                            else {
+                                nijeUnesenoPrisustvo.className = "prisustvo_da";
+                                if(j <= podaci.brojPredavanjaSedmicno ) brojacPredavanja = brojacPredavanja + 1;
+                                else brojacVjezbi = brojVjezbi + 1;
+                            }
+                        }
+                        let prisustva = {sedmica: trenutna, predavanja: brojacPredavanja, vjezbe: brojacVjezbi}
+                        PoziviAjax.postPrisustvo(podaci.predmet, podaci.studenti[i].index, prisustva, function(error, data) {});
+                    });
+                    //dodavanjeTaga.style.backgroundColor = "white";
+                    red.appendChild(nijeUnesenoPrisustvo);
                 }
-            }
+            }*/
 
             tabela.appendChild(red);
         }

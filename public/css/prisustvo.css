@@ -43,7 +43,7 @@ table .sedmica_nije_odrzana {
 
 table tr.red_1, tr.red_2{
     height: 55px;
-   
+   cursor: pointer;
 }
 
 table tr.red_1 .predavanje_vjezba {
@@ -57,6 +57,10 @@ table .prisustvo_da {
 
 table .prisustvo_ne {
     background-color: rgb(221, 49, 49);
+}
+
+table .prisustvo_nije_uneseno {
+    background-color: white;
 }
 
 button {

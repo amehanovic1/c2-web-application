@@ -17,12 +17,6 @@ let prisustvo = TabelaPrisustvo(div, {
     "index": 12345
     },
     {
-    "sedmica": 1,
-    "predavanja": 2,
-    "vjezbe": 2,
-    "index": 12346
-    },
-    {
     "sedmica": 2,
     "predavanja": 2,
     "vjezbe": 0,
