@@ -44,6 +44,10 @@ function uspjesanLogin (username, password) {
     return false;
 }
 
+/*bcrypt.hash(plaintextPassword, 10, function(err, hash) {
+
+});*/
+
 app.post('/login', function(req, res) {
     if(uspjesanLogin(req.body.username, req.body.password)) {
         req.session.username = req.body.username;
