@@ -137,11 +137,6 @@ app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
                             if(jsonRez[i].prisustva[j].index == index && jsonRez[i].prisustva[j].sedmica == req.body.sedmica) {
                             jsonRez[i].prisustva[j].predavanja = req.body.predavanja;
                             jsonRez[i].prisustva[j].vjezbe = req.body.vjezbe;
-                            /*console.log("Index: " + studentiNaPredmetu[j].index);
-                            console.log("Sedmica: " + jsonRez[i].prisustva[j].sedmica + "|" + studentiNaPredmetu[j].sedmica);
-                            console.log("Predavanja: " + jsonRez[i].prisustva[j].predavanja + "|" + studentiNaPredmetu[j].predavanja);
-                            console.log("Vjezbe: " + jsonRez[i].prisustva[j].vjezbe + "|" + studentiNaPredmetu[j].vjezbe);*/
-
                             fs.writeFile('./public/data/prisustva.json', JSON.stringify(jsonRez), 'utf8', error => {
                                 if(error) throw error;
                             });
@@ -177,7 +172,7 @@ function daLiPostojiStudent(prisustvoZaPredmet, index, sedmica) {
     }
     return false;
 }
-//dodati na stranicu
+
 app.post('/logout', (req, res) => {
     req.session.destroy();
     res.json({poruka: "Uspjesna odjava"});

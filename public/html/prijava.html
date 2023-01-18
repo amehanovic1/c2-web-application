@@ -4,24 +4,23 @@
     <head>
         <title> Prijava </title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--dodano -->
-        <link rel="shortcut icon" href="#">
+        <link rel="stylesheet" href="../css/prijava.css">
     </head>
 
     <body>
+        <div>
+            <form>
+                <label for="username"> Korisničko ime: </label><br>
+                <input type="text" id="username" name="username"><br><br>
 
-        <form>
-            <label for="username"> Username: </label><br>
-            <input type="text" id="username" name="username"><br>
+                <label for="password"> Lozinka: </label><br>
+                <input type="password" id="password" name="password"><br>
 
-            <label for="password"> Password: </label><br>
-            <input type="password" id="password" name="password"><br>
+                <p id="poruka"></p>
 
-            <!-- nije potrebno praviti css pa je urađeno na ovaj nacin -->
-            <p id="greska" style="color:red;"></p>
-
-            <input type="button" id="submit" value="Submit" onclick="prijavi()">
-        </form>
+                <input type="button" id="submit" value="Prijava" onclick="prijaviSe()">
+            </form>
+        </div>
     
         <script src="../scripts/poziviAjax.js"></script>
         <script src="../scripts/login.js"></script>
