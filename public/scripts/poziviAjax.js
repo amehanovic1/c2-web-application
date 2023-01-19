@@ -7,16 +7,12 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                //fnCallback(null, jsonRez.status);
-                if(jsonRez.greska != "Nastavnik nije loginovan") {
-                    fnCallback(null, jsonRez); 
-                }
-                /*if(jsonRez.error != null) {
-                    fnCallback(jsonRez.data, null);
+                if(jsonRez.greska != null) {
+                    fnCallback(jsonRez.greska, null);
                 }
                 else {
                     fnCallback(null, jsonRez);
-                }*/
+                }
             }
             else if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
@@ -31,15 +27,12 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                if(jsonRez.greska != "Nastavnik nije loginovan") {
-                    fnCallback(null, jsonRez); 
-                }
-                /*if(jsonRez.error != null) {
-                    fnCallback(jsonRez.data, null);
+                if(jsonRez.greska != null) {
+                    fnCallback(jsonRez.greska, null);
                 }
                 else {
                     fnCallback(null, jsonRez);
-                }*/
+                }
             }
             else if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
@@ -61,14 +54,6 @@ const PoziviAjax = (()=>{
                 else {
                     fnCallback(null, jsonRez.poruka);
                 }
-                /*
-                if(jsonRez.error != null) {
-                    fnCallback(jsonRez.data, null);
-                }
-                else {
-                    fnCallback(null, jsonRez);
-                }
-                */
             }
             else if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
@@ -86,15 +71,14 @@ const PoziviAjax = (()=>{
                 var jsonRez = JSON.parse(ajax.responseText);
                 
                 window.location.href = '/prijava.html';
-                //fnCallback(null, jsonRez.status);
-                /*
+                
                 if(jsonRez.error != null) {
                     fnCallback(jsonRez.data, null);
                 }
                 else {
                     fnCallback(null, jsonRez);
                 }
-                */
+                
             }
             if(ajax.readyState == 4)
                 fnCallback(ajax.statusText, null);

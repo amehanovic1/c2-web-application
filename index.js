@@ -1,23 +1,21 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const fs = require('fs');
-const bcrypt = require('bcrypt')
-//const path = require('path');
+const fs = require("fs");
+const bcrypt = require('bcrypt');
+const e = require("express");
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
-    secret: 'assdfghjkallsoekd',
+    secret: 'secret',
     resave: true,
     saveUninitialized: true
 }))
 
-app.use(express.static(__dirname + '/public'));
-//app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static('public'));
+app.use(express.static(__dirname + "/public"));
 
 app.get('/prijava.html', function(req, res) {
     res.sendFile(__dirname + "/public/html/prijava.html");
@@ -34,12 +32,8 @@ fs.readFile('./public/data/nastavnici.json', 'utf8', (error, data) => {
 
 });
 
-
 function uspjesanLogin (username, password) {
     for(let i = 0; i < nastavnici.length; i++) {
-        /*bcrypt.hash(nastavnici[i].nastavnik.password_hash, 10, function(err, hash) {
-            console.log("Korisnik: " + nastavnici[i].nastavnik.username + " | Sifra: "  + hash);
-        });*/
         const passwordOdgovara = bcrypt.compare(password, nastavnici[i].nastavnik.password_hash);
         if(username == nastavnici[i].nastavnik.username && passwordOdgovara) {
             return true;
@@ -61,120 +55,132 @@ app.post('/login', function(req, res) {
     else {
         res.json({"poruka": "Neuspješna prijava"});
     }
-
-    
-    /*if(req.session) {
-        username = req.body.username;
-        password = req.body.password;
-    }
-    else {
-        //nije uneseno
-    }*/
-    //let nastavnik = nadjiNastavnika(username, password);
-    //provjeriti da li ima u nastavnici.json
-    //if(nastavnik) {
-        //Ukoliko je ispravno loginovan korisnik u sesiju upišite username korisnika i listu predmeta na kojima je on nastavnik
-       // req.session.username = username;
-        //req.session.predmeti = nastavnik.predmeti;
-        //U odgovoru vratite json u formatu...
-        //poruka = "Uspješna prijava";
-    /*}
-    else {
-        poruka = "Neuspješna prijava";
-    }
-    */
 });
 
 app.get('/predmeti', function(req, res) {
-    if(req.session) {
-        let predmeti = [];
-        for(let i = 0; i < nastavnici.length; i++) {
-            if(req.session.username == nastavnici[i].nastavnik.username) {
-                predmeti = nastavnici[i].predmeti;
+    if(req.session && req.session.username) {
+        res.json(req.session.predmeti);
+    }
+    else {
+        res.json({"greska": "Nastavnik nije loginovan"});
+    }
+});
+
+function provjeriPredmet(username, nazivPredmeta) {
+    let postojiPredmet = false;
+    for(let i = 0; i < nastavnici.length; i++) {
+        //za trenutnog nastavnika
+        if(username === nastavnici[i].nastavnik.username) {
+            console.log("Username: " + username + " | Trenutni: " + nastavnici[i].nastavnik.username);
+            //provjeriti izabrani predmet
+            for(let j = 0; j < nastavnici[i].predmeti.length; j ++) {
+                console.log("Naziv predmeta: " + nazivPredmeta + " | Trenutni predmet: " + nastavnici[i].predmeti[j]);
+                if(nastavnici[i].predmeti[j] === nazivPredmeta) {
+                    postojiPredmet = true;
+                    break; 
+                }
             }
         }
-        res.json(predmeti);
+        if(postojiPredmet) break;
     }
-    else {
-        res.json({"greska": "Nastavnik nije loginovan"});
-    }
-});
+    return postojiPredmet;
+}
 
-//kao rezultat poziva dobija se lista prisustva u json formatu za navedeni predmet
-app.get('/predmeti/:naziv', function(req, res) {
+//podaci o prisustvu
+app.get('/predmeti/:NAZIV', function(req, res) {
     //provjera da li je nastavnik loginovan
-    if(req.session) {
-        fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
-            if (error) throw error;
-            let jsonRez = JSON.parse(data);
-            let nazivPredmeta = req.params.naziv;
-            for(let i = 0; i < jsonRez.length; i++) {
-                if(jsonRez[i].predmet === nazivPredmeta) {
-                    res.json(jsonRez[i]); 
+    if(req.session && req.session.username) {
+        //provjera da li je predmet u listi njegovih predmeta
+        let predmet = provjeriPredmet(req.session.username, req.params.NAZIV);
+        if(predmet) {
+            fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
+                if (error) throw error;
+                let prisustvo = JSON.parse(data);
+                let nazivPredmeta = req.params.NAZIV;
+                for(let i = 0; i < prisustvo.length; i++) {
+                    if(prisustvo[i].predmet === nazivPredmeta) {
+                        res.json(prisustvo[i]); 
+                    }
                 }
-            }
-    });
+            });
+        }
+        else {
+            res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
+        }
     }
     else {
         res.json({"greska": "Nastavnik nije loginovan"});
     }
 });
 
-//promjena prisustva
-app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
-    if(req.session) {
-        fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
-            if (error) throw error;
-            let jsonRez = JSON.parse(data);
-
-            let nazivPredmeta = req.params.NAZIV;
-            let index = req.params.index;
-            for(let i = 0; i < jsonRez.length; i++) {
-                if(jsonRez[i].predmet === nazivPredmeta) {
-                    if(daLiPostojiStudent(jsonRez[i].prisustva, index, req.body.sedmica)) {
-                        for(let j = 0; j < jsonRez[i].prisustva.length; j++) {
-                            if(jsonRez[i].prisustva[j].index == index && jsonRez[i].prisustva[j].sedmica == req.body.sedmica) {
-                            jsonRez[i].prisustva[j].predavanja = req.body.predavanja;
-                            jsonRez[i].prisustva[j].vjezbe = req.body.vjezbe;
-                            fs.writeFile('./public/data/prisustva.json', JSON.stringify(jsonRez), 'utf8', error => {
-                                if(error) throw error;
-                            });
-                          }
-                        }
-                    }
-                    else {
-                        //sedmica koja nema prisustvo
-                        let data = {
-                            "sedmica": req.body.sedmica,
-                            "predavanja": req.body.predavanja,
-                            "vjezbe": req.body.vjezbe,
-                            "index": Number(index)
-                        };
-
-                        jsonRez[i].prisustva.push(data);
-                        fs.writeFile('./public/data/prisustva.json', JSON.stringify(jsonRez), 'utf8', error => {
-                            if(error) throw error;});
-                    }
-                    res.json(jsonRez[i]); 
-                }
-            }
-        });
-    }
-    else {
-        res.json({"greska": "Nastavnik nije loginovan"});
-    }
-});
-
-function daLiPostojiStudent(prisustvoZaPredmet, index, sedmica) {
+function provjeriPrisustvoZaStudenta(prisustvoZaPredmet, index, sedmica) {
     for(let i = 0; i < prisustvoZaPredmet.length; i++) {
         if(prisustvoZaPredmet[i].index == index && prisustvoZaPredmet[i].sedmica == sedmica)  return true;
     }
     return false;
 }
 
+//promjena prisustva
+app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
+    //provjera da li je nastavnik loginovan
+    if(req.session && req.session.username) {
+        //provjera da li je predmet u listi njegovih predmeta
+        let predmet = provjeriPredmet(req.params.naziv);
+        if(predmet) {
+            fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
+                if (error) throw error;
+
+                let podaciPrisustvo = JSON.parse(data);
+                let nazivPredmeta = req.params.NAZIV;
+                let index = req.params.index;
+                let sedmica = req.body.sedmica;
+
+                for(let i = 0; i < podaciPrisustvo.length; i++) {
+                    if(podaciPrisustvo[i].predmet === nazivPredmeta) {
+
+                        if(provjeriPrisustvoZaStudenta(podaciPrisustvo[i].prisustva, index, req.body.sedmica)) {
+                            
+                            for(let j = 0; j < podaciPrisustvo[i].prisustva.length; j++) {
+                                if(podaciPrisustvo[i].prisustva[j].index == index && podaciPrisustvo[i].prisustva[j].sedmica == sedmica) {
+                                    podaciPrisustvo[i].prisustva[j].predavanja = req.body.predavanja;
+                                    podaciPrisustvo[i].prisustva[j].vjezbe = req.body.vjezbe;
+                                    fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
+                                        if(error) throw error;
+                                    });
+                                }
+                            }
+                        }
+                        else {
+                            //sedmica koja nema prisustvo
+                            let novaSedmica = {
+                                "sedmica": req.body.sedmica,
+                                "predavanja": req.body.predavanja,
+                                "vjezbe": req.body.vjezbe,
+                                "index": Number(index)
+                            };
+
+                            podaciPrisustvo[i].prisustva.push(novaSedmica);
+                            fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
+                                if(error) throw error;
+                            });
+                        }
+                        res.json(podaciPrisustvo[i]); 
+                    }
+                }
+            });
+        }
+        else {
+            res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
+        }
+    }
+    else {
+        res.json({"greska": "Nastavnik nije loginovan"});
+    }
+});
+
 app.post('/logout', (req, res) => {
     req.session.destroy();
-    res.json({poruka: "Uspjesna odjava"});
+    res.json({"poruka": "Uspješna odjava"});
 });
 
 app.listen(3000, () => {console.log("Server aktivan")});

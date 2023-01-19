@@ -76,7 +76,7 @@ button {
     margin: 0;
 }
 
-#divMeni {
+.divMeni {
     width: 100%;
     min-height: 50px;
     background-color: rgb(230, 240, 249);
