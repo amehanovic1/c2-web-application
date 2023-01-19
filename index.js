@@ -3,7 +3,6 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const bcrypt = require('bcrypt');
-const e = require("express");
 const app = express();
 
 app.use(bodyParser.json());
@@ -71,10 +70,8 @@ function provjeriPredmet(username, nazivPredmeta) {
     for(let i = 0; i < nastavnici.length; i++) {
         //za trenutnog nastavnika
         if(username === nastavnici[i].nastavnik.username) {
-            console.log("Username: " + username + " | Trenutni: " + nastavnici[i].nastavnik.username);
             //provjeriti izabrani predmet
             for(let j = 0; j < nastavnici[i].predmeti.length; j ++) {
-                console.log("Naziv predmeta: " + nazivPredmeta + " | Trenutni predmet: " + nastavnici[i].predmeti[j]);
                 if(nastavnici[i].predmeti[j] === nazivPredmeta) {
                     postojiPredmet = true;
                     break; 
@@ -93,16 +90,19 @@ app.get('/predmeti/:NAZIV', function(req, res) {
         //provjera da li je predmet u listi njegovih predmeta
         let predmet = provjeriPredmet(req.session.username, req.params.NAZIV);
         if(predmet) {
+            let prisustvoZaPredmet = {};
             fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
                 if (error) throw error;
-                let prisustvo = JSON.parse(data);
+                let prisustvo = JSON.parse(data); 
+            
                 let nazivPredmeta = req.params.NAZIV;
                 for(let i = 0; i < prisustvo.length; i++) {
                     if(prisustvo[i].predmet === nazivPredmeta) {
-                        res.json(prisustvo[i]); 
+                        prisustvoZaPredmet = prisustvo[i];
+                        res.json(prisustvo[i]);
                     }
                 }
-            });
+           });
         }
         else {
             res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
@@ -124,54 +124,47 @@ function provjeriPrisustvoZaStudenta(prisustvoZaPredmet, index, sedmica) {
 app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
     //provjera da li je nastavnik loginovan
     if(req.session && req.session.username) {
-        //provjera da li je predmet u listi njegovih predmeta
-        let predmet = provjeriPredmet(req.params.naziv);
-        if(predmet) {
-            fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
-                if (error) throw error;
+        fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
+            if (error) throw error;
+            
+            let podaciPrisustvo = JSON.parse(data);
+            let nazivPredmeta = req.params.NAZIV;
+            let index = req.params.index;
+            let sedmica = req.body.sedmica;
 
-                let podaciPrisustvo = JSON.parse(data);
-                let nazivPredmeta = req.params.NAZIV;
-                let index = req.params.index;
-                let sedmica = req.body.sedmica;
+            for(let i = 0; i < podaciPrisustvo.length; i++) {
+                if(podaciPrisustvo[i].predmet === nazivPredmeta) {
 
-                for(let i = 0; i < podaciPrisustvo.length; i++) {
-                    if(podaciPrisustvo[i].predmet === nazivPredmeta) {
+                    if(provjeriPrisustvoZaStudenta(podaciPrisustvo[i].prisustva, index, req.body.sedmica)) {
 
-                        if(provjeriPrisustvoZaStudenta(podaciPrisustvo[i].prisustva, index, req.body.sedmica)) {
-                            
-                            for(let j = 0; j < podaciPrisustvo[i].prisustva.length; j++) {
-                                if(podaciPrisustvo[i].prisustva[j].index == index && podaciPrisustvo[i].prisustva[j].sedmica == sedmica) {
-                                    podaciPrisustvo[i].prisustva[j].predavanja = req.body.predavanja;
-                                    podaciPrisustvo[i].prisustva[j].vjezbe = req.body.vjezbe;
-                                    fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
-                                        if(error) throw error;
-                                    });
-                                }
+                        for(let j = 0; j < podaciPrisustvo[i].prisustva.length; j++) {
+                            if(podaciPrisustvo[i].prisustva[j].index == index && podaciPrisustvo[i].prisustva[j].sedmica == sedmica) {
+                                podaciPrisustvo[i].prisustva[j].predavanja = req.body.predavanja;
+                                podaciPrisustvo[i].prisustva[j].vjezbe = req.body.vjezbe;
+                                fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
+                                    if(error) throw error;
+                                });
                             }
                         }
-                        else {
-                            //sedmica koja nema prisustvo
-                            let novaSedmica = {
-                                "sedmica": req.body.sedmica,
-                                "predavanja": req.body.predavanja,
-                                "vjezbe": req.body.vjezbe,
-                                "index": Number(index)
-                            };
-
-                            podaciPrisustvo[i].prisustva.push(novaSedmica);
-                            fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
-                                if(error) throw error;
-                            });
-                        }
-                        res.json(podaciPrisustvo[i]); 
                     }
+                    else {
+                        //sedmica koja nema prisustvo
+                        let novaSedmica = {
+                            "sedmica": req.body.sedmica,
+                            "predavanja": req.body.predavanja,
+                            "vjezbe": req.body.vjezbe,
+                            "index": Number(index)
+                        };
+
+                        podaciPrisustvo[i].prisustva.push(novaSedmica);
+                        fs.writeFile('./public/data/prisustva.json', JSON.stringify(podaciPrisustvo), 'utf8', error => {
+                            if(error) throw error;
+                        });
+                    }
+                    res.json(podaciPrisustvo[i]); 
                 }
-            });
-        }
-        else {
-            res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
-        }
+            }
+        });
     }
     else {
         res.json({"greska": "Nastavnik nije loginovan"});

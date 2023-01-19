@@ -52,7 +52,7 @@ const PoziviAjax = (()=>{
                     window.location.href = '/predmeti.html';
                 }
                 else {
-                    fnCallback(null, jsonRez.poruka);
+                    fnCallback(jsonRez.poruka, null);
                 }
             }
             else if(ajax.readyState == 4) {
@@ -69,19 +69,17 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                
-                window.location.href = '/prijava.html';
-                
-                if(jsonRez.error != null) {
-                    fnCallback(jsonRez.data, null);
+                if(jsonRez.poruka != null) {
+                    window.location.href = '/prijava.html';
+                    fnCallback(null, jsonRez.poruka);
                 }
                 else {
-                    fnCallback(null, jsonRez);
+                    fnCallback(jsonRez, null);
                 }
-                
             }
-            if(ajax.readyState == 4)
+            if(ajax.readyState == 4) {
                 fnCallback(ajax.statusText, null);
+            }
         }
         ajax.open("POST", "http://localhost:3000/logout", true);
         ajax.setRequestHeader("Content-Type", "application/json");
@@ -97,17 +95,14 @@ const PoziviAjax = (()=>{
         ajax.onreadystatechange = function() {
             if(ajax.readyState == 4 && ajax.status == 200) {
                 var jsonRez = JSON.parse(ajax.responseText);
-                let divTabela = document.getElementById("divTabela");
-                //fnCallback(null, jsonRez);
-                TabelaPrisustvo(divTabela, jsonRez);
-                /*
-                if(jsonRez.error != null) {
-                    fnCallback(jsonRez.data, null);
+                if(jsonRez.greska != null) {
+                    fnCallback(jsonRez.greska, null);
                 }
                 else {
+                    let divTabela = document.getElementById("divTabela");
+                    TabelaPrisustvo(divTabela, jsonRez);
                     fnCallback(null, jsonRez);
                 }
-                */
             }
             if(ajax.readyState == 4)
                 fnCallback(ajax.statusText, null);
