@@ -14,6 +14,10 @@ db.sequelize = sequelize;
 //import modela
 db.studenti = require("./studenti.js") (sequelize);
 db.nastavnici = require("./nastavnici.js") (sequelize);
+db.predmeti = require("./predmeti.js") (sequelize);
+
+//nastavnik moze predavati vise predmeta
+db.nastavnici.hasMany(db.predmeti, {as: 'nastavniciPredmeti' });
 
 module.exports = db;
 
