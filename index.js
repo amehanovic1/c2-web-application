@@ -8,6 +8,7 @@ const app = express();
 const Sequelize = require("sequelize");
 const db = require("./db");
 const { response } = require("express");
+const studenti = require("./studenti");
 //const priprema = require("./priprema");
 
 app.use(bodyParser.json());
@@ -70,51 +71,34 @@ app.get('/predmeti', function(req, res) {
     }
 });
 
-function provjeriPredmet(username, nazivPredmeta) {
-    let postojiPredmet = false;
-    for(let i = 0; i < nastavnici.length; i++) {
-        //za trenutnog nastavnika
-        if(username === nastavnici[i].nastavnik.username) {
-            //provjeriti izabrani predmet
-            for(let j = 0; j < nastavnici[i].predmeti.length; j ++) {
-                if(nastavnici[i].predmeti[j] === nazivPredmeta) {
-                    postojiPredmet = true;
-                    break; 
-                }
-            }
-        }
-        if(postojiPredmet) break;
-    }
-    return postojiPredmet;
-}
-
 //podaci o prisustvu
-app.get('/predmeti/:NAZIV', function(req, res) {
+app.get('/predmeti/:NAZIV', async function(req, res) {
     //provjera da li je nastavnik loginovan
     if(req.session && req.session.username) {
-        //provjera da li je predmet u listi njegovih predmeta
-        let predmet = provjeriPredmet(req.session.username, req.params.NAZIV);
-        if(predmet) {
-            let prisustvoZaPredmet = {};
-            fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
-                if (error) throw error;
-                let prisustvo = JSON.parse(data); 
-            
-                let nazivPredmeta = req.params.NAZIV;
-                for(let i = 0; i < prisustvo.length; i++) {
-                    if(prisustvo[i].predmet === nazivPredmeta) {
-                        prisustvoZaPredmet = prisustvo[i];
-                        res.json(prisustvo[i]);
-                    }
-                }
-           });
-        }
-        else {
+    let nastavnik = await db.nastavnici.findOne({where: {username: req.session.username} });
+        let predmet = await db.predmeti.findOne({where: {naziv: req.params.NAZIV, NastavnikId: nastavnik.id} });
+        if(predmet == null) {
             res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
+            return;
         }
+        
+        let prisustva = await db.prisustva.findAll({where: {predmetId: predmet.id} });
+
+        //studenti na predmetu 
+        studentiNaPredmetu = [];
+        db.predmeti.findOne( { where: {id: predmet.id} }).then( function (predmet){
+            predmet.getStudenti().then( function (studenti){
+                studenti.forEach(student => {
+                    studentiNaPredmetu.push({ime: student.ime, index: student.index});
+                });
+                res.json({studenti: studentiNaPredmetu, prisustva: prisustva, predmet: predmet.naziv, brojPredavanjaSedmicno: predmet.brojPredavanjaSedmicno, brojVjezbiSedmicno: predmet.brojVjezbiSedmicno});
+            }); 
+
+        });
     }
     else {
         res.json({"greska": "Nastavnik nije loginovan"});
+        return;
     }
 });
 
