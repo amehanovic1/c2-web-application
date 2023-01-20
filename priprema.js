@@ -15,7 +15,7 @@ function inicijalizacija() {
     return new Promise(function (resolve, reject) {
         studentiListaPromisea.push(db.studenti.create({ ime: "Neko Nekic", index: "12345"}));
         studentiListaPromisea.push(db.studenti.create({ ime: "Drugi Neko", index: "12346"}));
-        studentiListaPromisea.push(db.studenti.create({ ime: "Treci Nekoi", index: "12347"}));
+        studentiListaPromisea.push(db.studenti.create({ ime: "Treci Neko", index: "12347"}));
 
         Promise.all(studentiListaPromisea).then(function(studenti){
             var prvi = studenti.filter(function(s){return s.index == 12345})[0]; 
@@ -35,7 +35,7 @@ function inicijalizacija() {
             }));
 
             predmetiListaPromisea.push(db.predmeti.create({naziv: "Verifikacija i validacija softvera", brojPredavanjaSedmicno: 2, brojVjezbiSedmicno: 2}).then(function(p) {
-                return p.setStudenti([drugi, treci]).then(function() {
+                return p.setStudenti([prvi, drugi, treci]).then(function() {
                     return new Promise(function(resolve, reject) {resolve(p); });
                 });
             }));

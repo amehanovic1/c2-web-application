@@ -7,9 +7,9 @@ const app = express();
 
 const Sequelize = require("sequelize");
 const db = require("./db");
-const { response } = require("express");
-const studenti = require("./studenti");
-//const priprema = require("./priprema");
+
+//KREIRANJE TABELA I UBACIVANJE POCETNIH PODATAKA
+const priprema = require("./priprema");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -75,15 +75,13 @@ app.get('/predmeti', function(req, res) {
 app.get('/predmeti/:NAZIV', async function(req, res) {
     //provjera da li je nastavnik loginovan
     if(req.session && req.session.username) {
-    let nastavnik = await db.nastavnici.findOne({where: {username: req.session.username} });
+        let nastavnik = await db.nastavnici.findOne({where: {username: req.session.username} });
         let predmet = await db.predmeti.findOne({where: {naziv: req.params.NAZIV, NastavnikId: nastavnik.id} });
         if(predmet == null) {
             res.json({"greska": "Nastavnik ne predaje izabrani predmet"});
             return;
         }
-        
         let prisustva = await db.prisustva.findAll({where: {predmetId: predmet.id} });
-
         //studenti na predmetu 
         studentiNaPredmetu = [];
         db.predmeti.findOne( { where: {id: predmet.id} }).then( function (predmet){
@@ -113,7 +111,8 @@ function provjeriPrisustvoZaStudenta(prisustvoZaPredmet, index, sedmica) {
 app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
     //provjera da li je nastavnik loginovan
     if(req.session && req.session.username) {
-        fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
+
+       /* fs.readFile('./public/data/prisustva.json', 'utf8', (error, data) => {
             if (error) throw error;
             
             let podaciPrisustvo = JSON.parse(data);
@@ -153,7 +152,7 @@ app.post('/prisustvo/predmet/:NAZIV/student/:index', function (req, res) {
                     res.json(podaciPrisustvo[i]); 
                 }
             }
-        });
+        });*/
     }
     else {
         res.json({"greska": "Nastavnik nije loginovan"});
