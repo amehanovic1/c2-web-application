@@ -5,8 +5,7 @@ module.exports = function(sequelize, DataTypes) {
         naziv: Sequelize.STRING,
         brojPredavanjaSedmicno: Sequelize.INTEGER,
         brojVjezbiSedmicno: Sequelize.INTEGER
-        /*idNastavnik: Sequelize.INTEGER*/
-    }, { tableName: "Predmeti" });
+    }, { tableName: "Predmeti", timestamps: false });
     return Predmet;
 }
 
