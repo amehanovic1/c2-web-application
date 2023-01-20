@@ -7,7 +7,8 @@ const app = express();
 
 const Sequelize = require("sequelize");
 const db = require("./db");
-const priprema = require("./priprema");
+const { response } = require("express");
+//const priprema = require("./priprema");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -35,29 +36,29 @@ fs.readFile('./public/data/nastavnici.json', 'utf8', (error, data) => {
 
 });
 
-function uspjesanLogin (username, password) {
-    for(let i = 0; i < nastavnici.length; i++) {
-        const passwordOdgovara = bcrypt.compare(password, nastavnici[i].nastavnik.password_hash);
-        if(username == nastavnici[i].nastavnik.username && passwordOdgovara) {
-            return true;
-        }
-    }
-    return false;
-}
-
 app.post('/login', function(req, res) {
-    if(uspjesanLogin(req.body.username, req.body.password)) {
-        req.session.username = req.body.username;
-        for(let i = 0; i < nastavnici.length; i++) {
-            if(req.body.username == nastavnici[i].nastavnik.username) {
-                req.session.predmeti = nastavnici[i].predmeti;
-            }
+    db.nastavnici.findOne( {where: {username: req.body.username} } ).then(function(nastavnik) {
+        if(nastavnik != null) {
+            bcrypt.compare(req.body.password, nastavnik.password_hash, (error, response) => {
+                if(!response) {
+                    res.json({"poruka": "Neuspješna prijava"});
+                    return;
+                }
+                req.session.username = req.body.username;
+                //lista predmeta
+                nastavnik.getNastavniciPredmeti().then(function (predmeti) {
+                    let pomocni = [];
+                    predmeti.forEach(predmet => pomocni.push(predmet.naziv));
+                    req.session.predmeti = pomocni;
+                    res.json({"poruka": "Uspješna prijava"});
+                });
+            });
         }
-        res.json({"poruka": "Uspješna prijava"});
-    }
-    else {
-        res.json({"poruka": "Neuspješna prijava"});
-    }
+        else {
+            res.json({"poruka": "Neuspješna prijava"});
+            return;
+        }
+    });
 });
 
 app.get('/predmeti', function(req, res) {
