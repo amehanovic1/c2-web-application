@@ -2,8 +2,12 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const fs = require("fs");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const app = express();
+
+const Sequelize = require("sequelize");
+const db = require("./db");
+const priprema = require("./priprema");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -176,4 +180,4 @@ app.post('/logout', (req, res) => {
     res.json({"poruka": "Uspješna odjava"});
 });
 
-app.listen(3000, () => {console.log("Server aktivan")});
+app.listen(3000, () => { console.log("Server aktivan"); });
