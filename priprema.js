@@ -3,7 +3,7 @@ const db = require("./db.js");
 db.sequelize.sync({force: true}).then(function(){
     inicijalizacija().then(function() {
         console.log("Gotovo kreiranje tabela i ubacivanje pocetnih podataka!");
-        process.exit();
+        //process.exit();
     });
 });
 
@@ -46,7 +46,7 @@ function inicijalizacija() {
                 var vvs = predmeti.filter(function(p){return p.naziv === "Verifikacija i validacija softvera"})[0];
 
                 nastavniciListaPromisea.push(
-                    db.nastavnici.create({ username: "amehanovic2", password_hash: "$2b$10$Lp3gP9GA/OhfURK4NYiia.xMLkahboqoaSufK0.soSG8RWGgKaQce"}).then(function(n) {
+                    db.nastavnici.create({ username: "amehanovic2", password_hash: "$2a$12$aV54KKyW6EBlnVPXQ4LAJezMoCjGXYL3x5yk9H/xiA03fxvZ1Ofw6"}).then(function(n) {
                         return n.setNastavniciPredmeti([wt, vvs]).then(function() {
                             return new Promise(function(resolve, reject) {resolve(n); });
                         });
@@ -54,7 +54,7 @@ function inicijalizacija() {
                 );
 
                 nastavniciListaPromisea.push(
-                    db.nastavnici.create({ username: "username", password_hash: "$2b$10$2i4r8CFEsKp9JBDcjQ0dhOv6RIDFUJlf.iYm/5m7hv/.O/rrvwF4y"}).then(function(n) {
+                    db.nastavnici.create({ username: "username", password_hash: "$2a$12$aV54KKyW6EBlnVPXQ4LAJezMoCjGXYL3x5yk9H/xiA03fxvZ1Ofw6"}).then(function(n) {
                         return n.setNastavniciPredmeti([rg]).then(function() {
                             return new Promise(function(resolve, reject) {resolve(n); });
                         });
